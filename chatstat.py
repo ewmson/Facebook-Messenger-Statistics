@@ -7,7 +7,7 @@ from functools import wraps
 
 def show_or_return(graph_func):
     """
-    decorator for functions that can either 
+    decorator for functions that can either
     return a graph object or show a figure
     """
     @wraps(graph_func)
@@ -47,7 +47,7 @@ class ChatStat:
 
     @show_or_return
     def biggest_chat(self, top=10, kind="pie", include_groups=True, show=True):
-        """ 
+        """
         plots the largest chats overall. by default, only plots top 10
 
         Parameters
@@ -87,8 +87,8 @@ class ChatStat:
 
     @show_or_return
     def sent_from(self, chat=None, top=10, omit_first=False, kind="pie", show=True):
-        """ 
-        plots the number of messages received based on sender for the DF passed in. 
+        """
+        plots the number of messages received based on sender for the DF passed in.
         Can be used on filtered DataFrames. by default, only plots top 10 senders
 
         Parameters
@@ -130,8 +130,8 @@ class ChatStat:
 
     @show_or_return
     def msg_types(self, chat=None, show=True):
-        """ 
-        Takes a filtered msg_df (based on sender or chat title) and breaks down the type of messages 
+        """
+        Takes a filtered msg_df (based on sender or chat title) and breaks down the type of messages
 
         Parameters
         ----------
@@ -155,8 +155,8 @@ class ChatStat:
 
     @show_or_return
     def chat_types(self, chat=None, show=True):
-        """ 
-        Takes a filtered msg_df (based on sender or chat title) and breaks down the type of chat 
+        """
+        Takes a filtered msg_df (based on sender or chat title) and breaks down the type of chat
 
         Parameters
         ----------
@@ -178,7 +178,7 @@ class ChatStat:
         return fig, graph
 
     def personal_stats(self, name, word_lengths=[1, 3, 5]):
-        """ 
+        """
         Plots a bunch of different plots based on a fitlered DataFrame of messages from `name`
 
         Parameters
@@ -222,8 +222,8 @@ class ChatStat:
         self.word_counts(from_sender, length=word_lengths, show=True)
 
     def stat_by_chat(self, chat, word_lengths=[1, 3, 5]):
-        """ 
-        Plots a bunch of different plots based on a fitlered DataFrame of messages in the chat `chat` 
+        """
+        Plots a bunch of different plots based on a fitlered DataFrame of messages in the chat `chat`
 
         Parameters
         ----------
@@ -374,7 +374,7 @@ class ChatStat:
         daily_df = daily_df[:top]
         daily_graph = go.Bar(x=daily_df.index.strftime("%Y-%b-%d"), y=daily_df.msg)
         return daily_graph
-    
+
     def weekday_graph(self, time_indexed):
         """
         generates an aggregated message count by minute
@@ -397,7 +397,7 @@ class ChatStat:
 
     @show_or_return
     def time_stats(self, messages=None, show=True):
-        """ 
+        """
         Plots the time-based activity of the passed in DataFrame
         or all messages available
 
@@ -438,8 +438,8 @@ class ChatStat:
 
     @show_or_return
     def word_counts(self, chat=None, length=1, top=10, show=True):
-        """ 
-        Counts the word usage based on the passed in DataFrame `chat` and 
+        """
+        Counts the word usage based on the passed in DataFrame `chat` and
         plots words that are longer than `length`
 
         Parameters
@@ -461,6 +461,10 @@ class ChatStat:
             for word in msg.split(" "):
                 word = word.lower()
                 word = word.rstrip('?:!.,;')
+                if word == "message":
+                    continue
+                if word == "reacted":
+                    continue
                 if word in words['count']:
                     words['count'][word] += 1
                 else:
@@ -495,8 +499,8 @@ class ChatStat:
 
     @show_or_return
     def chat_counts(self, top=10, omit_first=True, show=True):
-        """ 
-        counts the number of chats each person is in and plots the top x people in the most chats 
+        """
+        counts the number of chats each person is in and plots the top x people in the most chats
 
         Parameters
         ----------
@@ -520,7 +524,7 @@ class ChatStat:
         fig = go.Figure(graph)
         fig.update_layout(title_text=f"Number of chats by person (Top {top})")
         return fig, graph
-    
+
     def chat_window(self, thread, start, end):
         """
         Generates a JSON file for a chat between two timestamps
